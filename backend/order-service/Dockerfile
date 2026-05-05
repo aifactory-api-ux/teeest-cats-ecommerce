@@ -4,13 +4,12 @@ COPY package*.json ./
 RUN npm install
 COPY shared ./shared
 COPY order-service ./order-service
-RUN cd order-service && npx tsc --project tsconfig.json
+RUN cd order-service && npx tsc --rootDir .. --outDir ../dist
 
 FROM node:20-alpine
 WORKDIR /app
-COPY --from=builder /app/order-service/dist ./dist
-COPY --from=builder /app/shared ./shared
+COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package*.json ./
 RUN npm install --omit=dev
 EXPOSE 8004
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/order-service/main.js"]
