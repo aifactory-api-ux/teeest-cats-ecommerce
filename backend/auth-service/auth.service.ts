@@ -44,12 +44,17 @@ export class AuthService {
     const accessToken = this.generateToken(user);
     const refreshToken = this.generateRefreshToken(user);
 
-    const { passwordHash, ...userResponse } = user;
-
     return {
       accessToken,
       refreshToken,
-      user: userResponse as UserResponse,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        address: user.address,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
     };
   }
 
