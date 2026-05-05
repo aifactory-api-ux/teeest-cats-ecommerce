@@ -31,8 +31,8 @@ services:
 
   api-gateway:
     build:
-      context: ./backend/api-gateway
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: api-gateway/Dockerfile
 
     environment:
       NODE_ENV: production
@@ -63,8 +63,8 @@ services:
 
   auth-service:
     build:
-      context: ./backend/auth-service
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: auth-service/Dockerfile
 
     environment:
       NODE_ENV: production
@@ -88,8 +88,8 @@ services:
 
   product-service:
     build:
-      context: ./backend/product-service
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: product-service/Dockerfile
 
     environment:
       NODE_ENV: production
@@ -112,8 +112,8 @@ services:
 
   cart-service:
     build:
-      context: ./backend/cart-service
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: cart-service/Dockerfile
 
     environment:
       NODE_ENV: production
@@ -133,8 +133,8 @@ services:
 
   order-service:
     build:
-      context: ./backend/order-service
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: order-service/Dockerfile
 
     environment:
       NODE_ENV: production
@@ -158,8 +158,8 @@ services:
 
   review-service:
     build:
-      context: ./backend/review-service
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: review-service/Dockerfile
 
     environment:
       NODE_ENV: production
@@ -179,8 +179,8 @@ services:
 
   legal-service:
     build:
-      context: ./backend/legal-service
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: legal-service/Dockerfile
 
     environment:
       NODE_ENV: production
@@ -196,8 +196,8 @@ services:
 
   contact-service:
     build:
-      context: ./backend/contact-service
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: contact-service/Dockerfile
 
     environment:
       NODE_ENV: production
