@@ -2,7 +2,9 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
-COPY . .
+COPY shared ./shared
+COPY legal-service/src ./src
+COPY legal-service/tsconfig.json ./
 RUN npm run build
 
 FROM node:20-alpine
