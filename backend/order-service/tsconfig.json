@@ -17,5 +17,5 @@
     "noFallthroughCasesInSwitch": false,
     "ignoreDeprecations": "6.0"
   },
-  "include": ["../shared/**/*.ts", "./order-service/**/*.ts"]
+  "include": ["../shared/**/*.ts", "./*.ts"]
 }
