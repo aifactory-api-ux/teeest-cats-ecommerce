@@ -24,7 +24,7 @@ export interface LoginDto {
 export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
-  user: User;
+  user: UserResponse;
 }
 
 export interface UserResponse {
