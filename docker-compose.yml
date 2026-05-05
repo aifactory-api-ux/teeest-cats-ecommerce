@@ -3,7 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: teeest-cats-postgres
+
     environment:
       POSTGRES_USER: catshop
       POSTGRES_PASSWORD: catsecret123
@@ -20,7 +20,7 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: teeest-cats-redis
+
     ports:
       - "6379:6379"
     healthcheck:
@@ -33,7 +33,7 @@ services:
     build:
       context: ./backend/api-gateway
       dockerfile: Dockerfile
-    container_name: teeest-cats-api-gateway
+
     environment:
       NODE_ENV: production
       PORT: 8080
@@ -65,7 +65,7 @@ services:
     build:
       context: ./backend/auth-service
       dockerfile: Dockerfile
-    container_name: teeest-cats-auth-service
+
     environment:
       NODE_ENV: production
       PORT: 8001
@@ -90,7 +90,7 @@ services:
     build:
       context: ./backend/product-service
       dockerfile: Dockerfile
-    container_name: teeest-cats-product-service
+
     environment:
       NODE_ENV: production
       PORT: 8002
@@ -114,7 +114,7 @@ services:
     build:
       context: ./backend/cart-service
       dockerfile: Dockerfile
-    container_name: teeest-cats-cart-service
+
     environment:
       NODE_ENV: production
       PORT: 8003
@@ -135,7 +135,7 @@ services:
     build:
       context: ./backend/order-service
       dockerfile: Dockerfile
-    container_name: teeest-cats-order-service
+
     environment:
       NODE_ENV: production
       PORT: 8004
@@ -160,7 +160,7 @@ services:
     build:
       context: ./backend/review-service
       dockerfile: Dockerfile
-    container_name: teeest-cats-review-service
+
     environment:
       NODE_ENV: production
       PORT: 8005
@@ -181,7 +181,7 @@ services:
     build:
       context: ./backend/legal-service
       dockerfile: Dockerfile
-    container_name: teeest-cats-legal-service
+
     environment:
       NODE_ENV: production
       PORT: 8006
@@ -198,7 +198,7 @@ services:
     build:
       context: ./backend/contact-service
       dockerfile: Dockerfile
-    container_name: teeest-cats-contact-service
+
     environment:
       NODE_ENV: production
       PORT: 8007
@@ -215,7 +215,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: teeest-cats-frontend
+
     environment:
       NODE_ENV: production
       VITE_API_URL: http://localhost:8080
