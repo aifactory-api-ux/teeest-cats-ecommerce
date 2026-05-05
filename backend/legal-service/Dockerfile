@@ -3,8 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY shared ./shared
-COPY legal-service/src ./src
-COPY legal-service/tsconfig.json ./
+COPY legal-service .
 RUN npm run build
 
 FROM node:20-alpine

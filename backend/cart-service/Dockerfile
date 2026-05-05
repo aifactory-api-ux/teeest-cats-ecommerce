@@ -3,8 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY shared ./shared
-COPY cart-service/src ./src
-COPY cart-service/tsconfig.json ./
+COPY cart-service .
 RUN npm run build
 
 FROM node:20-alpine

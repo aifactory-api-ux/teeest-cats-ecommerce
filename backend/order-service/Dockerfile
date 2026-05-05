@@ -3,8 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY shared ./shared
-COPY order-service/src ./src
-COPY order-service/tsconfig.json ./
+COPY order-service .
 RUN npm run build
 
 FROM node:20-alpine

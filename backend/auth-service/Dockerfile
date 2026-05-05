@@ -3,8 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY shared ./shared
-COPY auth-service/src ./src
-COPY auth-service/tsconfig.json ./
+COPY auth-service .
 RUN npm run build
 
 FROM node:20-alpine

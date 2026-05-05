@@ -3,8 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY shared ./shared
-COPY contact-service/src ./src
-COPY contact-service/tsconfig.json ./
+COPY contact-service .
 RUN npm run build
 
 FROM node:20-alpine

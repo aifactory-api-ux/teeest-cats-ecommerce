@@ -3,8 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY shared ./shared
-COPY api-gateway/src ./src
-COPY api-gateway/tsconfig.json ./
+COPY api-gateway .
 RUN npm run build
 
 FROM node:20-alpine
