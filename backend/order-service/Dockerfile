@@ -4,8 +4,7 @@ COPY package*.json ./
 RUN npm install
 COPY shared ./shared
 COPY order-service ./order-service
-COPY tsconfig.json ./
-RUN npx tsc -p tsconfig.json
+RUN cd order-service && npx tsc --project tsconfig.json
 
 FROM node:20-alpine
 WORKDIR /app
