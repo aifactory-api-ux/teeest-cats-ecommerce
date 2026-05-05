@@ -1,0 +1,229 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: teeest-cats-postgres
+    environment:
+      POSTGRES_USER: catshop
+      POSTGRES_PASSWORD: catsecret123
+      POSTGRES_DB: teeestcats
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U catshop"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: teeest-cats-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+      dockerfile: Dockerfile
+    container_name: teeest-cats-api-gateway
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      FRONTEND_URL: http://localhost:5173
+    ports:
+      - "8080:8080"
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      product-service:
+        condition: service_healthy
+      cart-service:
+        condition: service_healthy
+      order-service:
+        condition: service_healthy
+      review-service:
+        condition: service_healthy
+      legal-service:
+        condition: service_healthy
+      contact-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  auth-service:
+    build:
+      context: ./backend/auth-service
+      dockerfile: Dockerfile
+    container_name: teeest-cats-auth-service
+    environment:
+      NODE_ENV: production
+      PORT: 8001
+      DATABASE_URL: postgres://catshop:catsecret123@postgres:5432/teeestcats
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: supersecretjwtkey123
+      FRONTEND_URL: http://localhost:5173
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  product-service:
+    build:
+      context: ./backend/product-service
+      dockerfile: Dockerfile
+    container_name: teeest-cats-product-service
+    environment:
+      NODE_ENV: production
+      PORT: 8002
+      DATABASE_URL: postgres://catshop:catsecret123@postgres:5432/teeestcats
+      REDIS_URL: redis://redis:6379
+      FRONTEND_URL: http://localhost:5173
+    ports:
+      - "8002:8002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  cart-service:
+    build:
+      context: ./backend/cart-service
+      dockerfile: Dockerfile
+    container_name: teeest-cats-cart-service
+    environment:
+      NODE_ENV: production
+      PORT: 8003
+      REDIS_URL: redis://redis:6379
+      FRONTEND_URL: http://localhost:5173
+    ports:
+      - "8003:8003"
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  order-service:
+    build:
+      context: ./backend/order-service
+      dockerfile: Dockerfile
+    container_name: teeest-cats-order-service
+    environment:
+      NODE_ENV: production
+      PORT: 8004
+      DATABASE_URL: postgres://catshop:catsecret123@postgres:5432/teeestcats
+      REDIS_URL: redis://redis:6379
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-sk_test_placeholder}
+      FRONTEND_URL: http://localhost:5173
+    ports:
+      - "8004:8004"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  review-service:
+    build:
+      context: ./backend/review-service
+      dockerfile: Dockerfile
+    container_name: teeest-cats-review-service
+    environment:
+      NODE_ENV: production
+      PORT: 8005
+      DATABASE_URL: postgres://catshop:catsecret123@postgres:5432/teeestcats
+      FRONTEND_URL: http://localhost:5173
+    ports:
+      - "8005:8005"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  legal-service:
+    build:
+      context: ./backend/legal-service
+      dockerfile: Dockerfile
+    container_name: teeest-cats-legal-service
+    environment:
+      NODE_ENV: production
+      PORT: 8006
+      FRONTEND_URL: http://localhost:5173
+    ports:
+      - "8006:8006"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8006/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  contact-service:
+    build:
+      context: ./backend/contact-service
+      dockerfile: Dockerfile
+    container_name: teeest-cats-contact-service
+    environment:
+      NODE_ENV: production
+      PORT: 8007
+      FRONTEND_URL: http://localhost:5173
+    ports:
+      - "8007:8007"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8007/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: teeest-cats-frontend
+    environment:
+      NODE_ENV: production
+      VITE_API_URL: http://localhost:8080
+    ports:
+      - "5173:5173"
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
